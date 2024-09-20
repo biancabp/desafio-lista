@@ -8,15 +8,15 @@ Para iniciar o projeto, siga os passos abaixo:
 
 ### Pré-requisitos
 
-Certifique-se de ter o [Node.js](https://nodejs.org/) e o [npm](https://www.npmjs.com/) instalados em sua máquina.
+instalar o [Node.js](https://nodejs.org/) e o [npm](https://www.npmjs.com/) na sua máquina.
 
 ### Instalando Dependências
 
-Na raiz do projeto, execute o seguinte comando para instalar as dependências:
+na raiz do projeto, execute o seguinte comando para instalar as dependências:
 
 npm install
 
-Na pasta do projeto, você pode executar:
+na pasta do projeto, você pode executar:
 
 npm start
 
