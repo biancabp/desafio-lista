@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Layout } from 'antd';
+import { Layout, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 
 const SalesTable = () => {
@@ -19,9 +19,9 @@ const SalesTable = () => {
       title: 'SKU',
       dataIndex: 'products',
       key: 'sku',
-      render: (products) => 
-        Array.isArray(products) 
-          ? products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', ') 
+      render: (products) =>
+        Array.isArray(products)
+          ? products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', ')
           : 'Sem produtos',
     },
     {
@@ -55,7 +55,7 @@ const SalesTable = () => {
   return (
     <Layout>
       <HeaderComponent /> {/* Cabeçalho */}
-      <div style={{ padding: '50px' }}>
+      <div style={{ padding: '50px', background: '#fff' }}>
         <h1>Vendas Realizadas</h1>
         <Table columns={columns} dataSource={salesData} rowKey="id" />
       </div>

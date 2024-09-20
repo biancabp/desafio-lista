@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Layout } from 'antd';
+import { Layout, Table } from 'antd';
+import React, { useEffect, useState } from 'react';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 
 const SalesTable = () => {
-    const [salesData, setSalesData] = useState([]);
-  
-    // Carregar as vendas do localStorage ao carregar o componente
-    useEffect(() => {
-      const storedSales = JSON.parse(localStorage.getItem('sales')) || [];
-      // Incluir vendas aprovadas, em processamento e reprovadas
-      const inProcessSales = storedSales.filter(
-        sale => sale.status === 'Aprovado' || sale.status === 'Em Processamento' || sale.status === 'Reprovado'
-      );
-      setSalesData(inProcessSales);
-    }, []);
-    
+  const [salesData, setSalesData] = useState([]);
+
+  // Carregar as vendas do localStorage ao carregar o componente
+  useEffect(() => {
+    const storedSales = JSON.parse(localStorage.getItem('sales')) || [];
+    // Incluir vendas aprovadas, em processamento e reprovadas
+    const inProcessSales = storedSales.filter(
+      sale => sale.status === 'Aprovado' || sale.status === 'Em Processamento' || sale.status === 'Reprovado'
+    );
+    setSalesData(inProcessSales);
+  }, []);
+
   const columns = [
     {
       title: 'SKU',
       dataIndex: 'products',
       key: 'sku',
-      render: (products) => 
-        Array.isArray(products) 
-          ? products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', ') 
+      render: (products) =>
+        Array.isArray(products)
+          ? products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', ')
           : 'Sem produtos',
     },
     {
@@ -56,7 +56,7 @@ const SalesTable = () => {
   return (
     <Layout>
       <HeaderComponent /> {/* Cabeçalho */}
-      <div style={{ padding: '50px' }}>
+      <div style={{ padding: '50px', background: '#fff' }}>
         <h1>Vendas Realizadas</h1>
         <Table columns={columns} dataSource={salesData} rowKey="id" />
       </div>

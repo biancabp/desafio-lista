@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Input, Select, List, Divider, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Divider, Input, List, Modal, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { SKUs } from '../../data/produtosCaseSB';
 
 const { Option } = Select;
@@ -47,39 +47,41 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
   const calculateTotalPrice = () => {
     if (!products.length || !region || !deliveryTime) return 0;
 
-    const productsSum = products.reduce((sum, product) => sum + (product.quantity * product.preco_descontado), 0);
+    // Usar preco_cheio para calcular o total
+    const productsSum = products.reduce((sum, product) => sum + (product.quantity * product.preco_cheio), 0);
 
     const deliveryAdditionalMap = {
       padrao: 0,
       turbo: 0.1,
       'super-turbo': 0.2,
     };
-    
+
     const deliveryAdditional = productsSum * deliveryAdditionalMap[deliveryTime];
     const shippingCost = calculateShipping(products, region);
 
     return productsSum + shippingCost + deliveryAdditional - discount;
   };
 
+
   const handleAddProduct = () => {
     const product = SKUs.find(p => p.SKU === sku);
-  
+
     if (products.some(p => p.sku === sku)) {
       setSkuError('Este SKU já foi adicionado');
       return;
     }
-  
+
     if (product) {
-      const newProduct = { sku, quantity, ...product };
+      const newProduct = { sku, quantity, ...product, preco: product.preco_cheio }; // Usando o preco_cheio
       setProducts(prevProducts => {
         const updatedProducts = [...prevProducts, newProduct];
-        
+
         // Atualiza o total após adicionar o produto
         setTotal(calculateTotalPrice(updatedProducts));
 
         return updatedProducts;
       });
-      
+
       setSku('');
       setQuantity(1);
     }
@@ -143,7 +145,7 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
         dataSource={products}
         renderItem={(item, index) => (
           <List.Item className="list-item">
-            <span>SKU: {item.sku}, Quantidade: {item.quantity}, Preço: R${item.preco_descontado}</span>
+            <span>SKU: {item.sku}, Quantidade: {item.quantity}, Preço: R${item.preco_cheio}</span>
             <Button
               type="link"
               icon={<DeleteOutlined />}
