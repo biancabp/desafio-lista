@@ -35,7 +35,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <HeaderComponent /> {/* Adicionar o cabeçalho */}
+      <HeaderComponent />
       <Content style={{ padding: '50px 50px 0 50px', background: '#fff', minHeight: 'calc(100vh - 134px)' }}>
         <Row gutter={[16, 16]}>
           <Col span={24} style={{ textAlign: '', background: '#fff', padding: '5px' }}>

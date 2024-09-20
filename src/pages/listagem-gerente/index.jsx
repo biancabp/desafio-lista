@@ -23,6 +23,7 @@ const SalesTable = () => {
       render: (products) =>
         Array.isArray(products)
           ? products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', ')
+
           : 'Sem produtos',
     },
     {

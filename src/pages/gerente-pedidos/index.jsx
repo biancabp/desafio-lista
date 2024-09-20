@@ -1,7 +1,7 @@
+import { Button, Layout, Popconfirm, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Layout, Popconfirm } from 'antd';
-import HeaderComponent from '../../components/Header/HeaderComponent';
 import { useNavigate } from 'react-router-dom';
+import HeaderComponent from '../../components/Header/HeaderComponent';
 
 const ListRequestsPage = () => {
   const [requests, setRequests] = useState([]);
@@ -9,11 +9,12 @@ const ListRequestsPage = () => {
 
   useEffect(() => {
     const storedRequests = JSON.parse(localStorage.getItem('requests')) || [];
-    setRequests(storedRequests);
+    const validRequests = storedRequests.filter(request => request.products);
+    setRequests(validRequests);
   }, []);
 
   const handleApproveRequest = (id) => {
-    if (!window.confirm(`Deseja aprovar a solicitação ${id}?`)) return;
+    if (!window.confirm(`Deseja aprovar a solicitação ${id} ?`)) return;
 
     const approvedRequest = requests.find((request) => request.id === id);
     const updatedRequests = requests.filter((request) => request.id !== id);
@@ -26,14 +27,14 @@ const ListRequestsPage = () => {
   };
 
   const handleRejectRequest = (id) => {
-    if (!window.confirm(`Deseja recusar a solicitação ${id}?`)) return;
+    if (!window.confirm(`Deseja recusar a solicitação ${id} ?`)) return;
 
     const rejectedRequest = requests.find((request) => request.id === id);
     const updatedRequests = requests.filter((request) => request.id !== id);
 
     const storedReprovados = JSON.parse(localStorage.getItem('reprovados')) || [];
     storedReprovados.push({ ...rejectedRequest, status: 'Reprovado' });
-    
+
     localStorage.setItem('requests', JSON.stringify(updatedRequests));
     localStorage.setItem('reprovados', JSON.stringify(storedReprovados));
     setRequests(updatedRequests);
@@ -49,7 +50,9 @@ const ListRequestsPage = () => {
       title: 'Produtos',
       dataIndex: 'products',
       key: 'products',
-      render: (products) => products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', '),
+      render: (products) => Array.isArray(products) ?
+        products.map(p => `SKU: ${p.sku}, Qtd: ${p.quantity}`).join(', ') :
+        'Nenhum produto',
     },
     {
       title: 'Região',
@@ -62,27 +65,28 @@ const ListRequestsPage = () => {
       key: 'deliveryTime',
     },
     {
-      title: 'Desconto',
-      dataIndex: 'discount',
-      key: 'discount',
-    },
-    {
       title: 'Total',
       dataIndex: 'total',
       key: 'total',
     },
     {
       title: 'Ações',
-      key: 'action',
+      key: 'actions',
       render: (_, record) => (
-        <>
-          <Popconfirm title="Aprovar solicitação?" onConfirm={() => handleApproveRequest(record.id)}>
-            <Button type="primary" style={{ marginRight: 8 }}>Aprovar</Button>
+        <span>
+          <Popconfirm
+            title="Tem certeza que deseja aprovar esta solicitação?"
+            onConfirm={() => handleApproveRequest(record.id)}
+          >
+            <Button type="primary">Aprovar</Button>
           </Popconfirm>
-          <Popconfirm title="Recusar solicitação?" onConfirm={() => handleRejectRequest(record.id)}>
-            <Button type="danger">Recusar</Button>
+          <Popconfirm
+            title="Tem certeza que deseja recusar esta solicitação?"
+            onConfirm={() => handleRejectRequest(record.id)}
+          >
+            <Button type="danger" style={{ marginLeft: '8px' }}>Recusar</Button>
           </Popconfirm>
-        </>
+        </span>
       ),
     },
   ];
@@ -92,10 +96,18 @@ const ListRequestsPage = () => {
       <HeaderComponent />
       <div style={{ padding: '50px' }}>
         <h1>Solicitações de Venda</h1>
-        <Button type="secondary" onClick={() => navigate('/listagem-gerente')} style={{ marginBottom: '20px', marginLeft: '10px' }}>
+        <Button
+          type="secondary"
+          onClick={() => navigate('/listagem-gerente')}
+          style={{ marginBottom: '20px' }}
+        >
           Ver Listagem do Gerente
         </Button>
-        <Table columns={columns} dataSource={requests} rowKey="id" />
+        <Table
+          columns={columns}
+          dataSource={requests}
+          rowKey="id"
+        />
       </div>
     </Layout>
   );

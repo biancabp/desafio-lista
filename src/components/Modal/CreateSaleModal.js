@@ -1,18 +1,16 @@
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, List, Modal, Select } from 'antd';
+import { Button, Divider, Input, List, Modal, Radio } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { SKUs } from '../../data/produtosCaseSB';
-
-const { Option } = Select;
 
 const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
   const [sku, setSku] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [products, setProducts] = useState([]);
-  const [region, setRegion] = useState('nordeste');
-  const [deliveryTime, setDeliveryTime] = useState('padrao');
-  const [discount, setDiscount] = useState(0);
+  const [region, setRegion] = useState('');
+  const [deliveryTime, setDeliveryTime] = useState('');
   const [total, setTotal] = useState(0);
+  const [discount, setDiscount] = useState(0);
   const [productDescription, setProductDescription] = useState('');
   const [skuError, setSkuError] = useState('');
 
@@ -34,34 +32,43 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
 
   const calculateShipping = (products, region) => {
     const regionFactor = {
-      norte: 1,
+      norte: 3,
       nordeste: 0,
-      centrooeste: 1.5,
-      sudeste: 2,
+      centrooeste: 3,
+      sudeste: 0,
       sul: 3,
     };
     const totalQuantity = products.reduce((sum, product) => sum + product.quantity, 0);
     return regionFactor[region] * totalQuantity;
   };
 
-  const calculateTotalPrice = () => {
-    if (!products.length || !region || !deliveryTime) return 0;
+  const calculateTotalPrice = (products) => {
+    if (!products.length || !region || !deliveryTime) return { total: 0, discount: 0 };
 
-    // Usar preco_cheio para calcular o total
-    const productsSum = products.reduce((sum, product) => sum + (product.quantity * product.preco_cheio), 0);
-
-    const deliveryAdditionalMap = {
-      padrao: 0,
-      turbo: 0.1,
-      'super-turbo': 0.2,
-    };
-
-    const deliveryAdditional = productsSum * deliveryAdditionalMap[deliveryTime];
     const shippingCost = calculateShipping(products, region);
+    const productsSum = products.reduce((sum, product) => sum + (product.quantity * product.preco_cheio), 0);
+    const totalWithoutDiscount = productsSum + shippingCost;
 
-    return productsSum + shippingCost + deliveryAdditional - discount;
+    let maxDiscount = 0;
+    if (deliveryTime === 'padrao') {
+      maxDiscount = Math.max(shippingCost, productsSum * 0.05);
+    } else if (deliveryTime === 'turbo') {
+      maxDiscount = Math.max(shippingCost, productsSum * 0.1);
+    } else if (deliveryTime === 'super-turbo') {
+      maxDiscount = Math.max(shippingCost, productsSum * 0.2);
+    }
+
+    return {
+      total: totalWithoutDiscount - maxDiscount,
+      discount: maxDiscount,
+    };
   };
 
+  const updateTotals = () => {
+    const { total, discount } = calculateTotalPrice(products);
+    setTotal(total);
+    setDiscount(discount);
+  };
 
   const handleAddProduct = () => {
     const product = SKUs.find(p => p.SKU === sku);
@@ -72,33 +79,36 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
     }
 
     if (product) {
-      const newProduct = { sku, quantity, ...product, preco: product.preco_cheio }; // Usando o preco_cheio
-      setProducts(prevProducts => {
-        const updatedProducts = [...prevProducts, newProduct];
+      const newProduct = { sku, quantity, ...product, preco: product.preco_cheio };
+      const updatedProducts = [...products, newProduct];
+      setProducts(updatedProducts);
+      updateTotals(); // Atualiza totais após adicionar produto
 
-        // Atualiza o total após adicionar o produto
-        setTotal(calculateTotalPrice(updatedProducts));
-
-        return updatedProducts;
-      });
-
-      setSku('');
+      setSku(''); // Limpar o SKU e quantidade
       setQuantity(1);
     }
   };
 
   const handleRemoveProduct = (index) => {
-    setProducts(prevProducts => {
-      const updatedProducts = prevProducts.filter((_, i) => i !== index);
-      setTotal(calculateTotalPrice(updatedProducts));
-      return updatedProducts;
-    });
+    const updatedProducts = products.filter((_, i) => i !== index);
+    setProducts(updatedProducts);
+    updateTotals(); // Atualiza totais após remover produto
   };
 
-  useEffect(() => {
-    setTotal(calculateTotalPrice());
-    console.log("Valor Total Atualizado:", total); // Adicione este log
-  }, [products, region, deliveryTime, discount]);
+  const handleRegionChange = (e) => {
+    setRegion(e.target.value);
+    updateTotals(); // Atualiza totais ao mudar a região
+  };
+
+  const handleDeliveryTimeChange = (e) => {
+    setDeliveryTime(e.target.value);
+    updateTotals(); // Atualiza totais ao mudar o prazo
+  };
+
+  const handleAddSale = () => {
+    const saleData = { products, region, deliveryTime, total, discount };
+    onAddSale(saleData);
+  };
 
   return (
     <Modal
@@ -107,10 +117,7 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
       onCancel={onCancel}
       footer={[
         <Button key="cancel" onClick={onCancel}>Cancelar</Button>,
-        <Button key="add" type="primary" onClick={() => {
-          const saleData = { products, region, deliveryTime, discount, total };
-          onAddSale(saleData);
-        }}>
+        <Button key="add" type="primary" onClick={handleAddSale}>
           Adicionar Venda
         </Button>
       ]}
@@ -145,7 +152,7 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
         dataSource={products}
         renderItem={(item, index) => (
           <List.Item className="list-item">
-            <span>SKU: {item.sku}, Quantidade: {item.quantity}, Preço: R${item.preco_cheio}</span>
+            <span>SKU: {item.sku}, Quantidade: {item.quantity}, Preço: R$ {item.preco_cheio}</span>
             <Button
               type="link"
               icon={<DeleteOutlined />}
@@ -159,37 +166,28 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
       />
 
       <h3>Detalhes</h3>
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-        <Select
-          placeholder="Região Destino"
-          value={region}
-          onChange={(value) => setRegion(value)}
-          style={{ flex: '1' }}
-        >
-          <Option value="norte">Norte</Option>
-          <Option value="nordeste">Nordeste</Option>
-          <Option value="centro-oeste">Centro-Oeste</Option>
-          <Option value="sudeste">Sudeste</Option>
-          <Option value="sul">Sul</Option>
-        </Select>
-        <Select
-          placeholder="Prazo"
-          value={deliveryTime}
-          onChange={(value) => setDeliveryTime(value)}
-          style={{ flex: '1' }}
-        >
-          <Option value="padrao">Padrão</Option>
-          <Option value="turbo">Turbo</Option>
-          <Option value="super-turbo">Super Turbo</Option>
-        </Select>
+      <div>
+        <h4>Região Destino</h4>
+        <Radio.Group onChange={handleRegionChange} value={region}>
+          <Radio value="norte">Norte</Radio>
+          <Radio value="nordeste">Nordeste</Radio>
+          <Radio value="centrooeste">Centro-Oeste</Radio>
+          <Radio value="sudeste">Sudeste</Radio>
+          <Radio value="sul">Sul</Radio>
+        </Radio.Group>
+
+        <h4>Prazo</h4>
+        <Radio.Group onChange={handleDeliveryTimeChange} value={deliveryTime}>
+          <Radio value="padrao">Padrão</Radio>
+          <Radio value="turbo">Turbo</Radio>
+          <Radio value="super-turbo">Super Turbo</Radio>
+        </Radio.Group>
+
+        <Divider />
+        <h3>Resumo</h3>
+        <p>Total: R$ {total.toFixed(2)}</p>
+        <p>Desconto: R$ {discount.toFixed(2)}</p>
       </div>
-      <Input
-        type="number"
-        placeholder="Desconto R$"
-        value={discount}
-        onChange={(e) => setDiscount(Number(e.target.value))}
-        style={{ marginBottom: '20px' }}
-      />
     </Modal>
   );
 };
