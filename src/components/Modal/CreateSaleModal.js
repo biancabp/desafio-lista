@@ -32,7 +32,6 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
     }
   }, [sku]);
 
-  // calculo de frete
 
   const calculateShipping = (products, region) => {
     const regionFactor = {
