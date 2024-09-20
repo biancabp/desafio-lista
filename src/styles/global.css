@@ -1,0 +1,108 @@
+
+*{
+    font-family: 'Poppins', sans-serif; 
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+.signin-container {
+    display: flex;
+    height: 100vh; 
+  }
+  
+  .signin-left {
+    flex: 1;
+    background: linear-gradient(180deg, #0575E6 0%, #02298A 50%, #021B79 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: start; 
+    text-align: left; 
+    padding: 20px;
+    width: 100%; 
+    padding-left: 40px;
+  }
+  
+  .signin-left-content {
+    max-width: 400px; 
+    width: 100%; 
+  }
+  
+  
+  .signin-left h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+  
+  .signin-left p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .signin-left button {
+    background-color: #ffb200;
+    border-color: #ffb200;
+    font-size: 1rem;
+    border-radius: 15px;
+  }
+  
+ 
+  .signin-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .signin-right h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .signin-right p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  
+  .signin-right form {
+    width: 100%;
+    max-width: 360px;
+  }
+  
+  .signin-right button {    
+    width: 100%;
+  }
+
+  .custom-input .ant-input {
+    border-radius: 8px;
+    border: 1px solid #dddddd8f;
+    font-size: 16px;
+    padding: 52px; 
+  }
+  
+  
+  .custom-input .ant-input-prefix {
+    color: #8c8c8c;
+  }
+  
+  .custom-form-item .ant-form-item-label > label {
+    color: #8c8c8c;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .ant-btn {
+    font-family: 'Poppins', sans-serif; 
+    padding: 22px 20px; 
+    border-radius: 12px;
+    margin-top: 10px; 
+  }
+  
+
+  

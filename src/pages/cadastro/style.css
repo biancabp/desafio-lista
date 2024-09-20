@@ -1,0 +1,85 @@
+.signup-container {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .signup-left {
+    flex: 1;
+    background: linear-gradient(180deg, #0575E6 0%, #02298A 50%, #021B79 100%);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    text-align: left;
+    padding: 20px;
+    width: 100%;
+    padding-left: 40px;
+  }
+  
+  .signup-left h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+  
+  .signup-left p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+  }
+  
+  .signup-left button {
+    background-color: #ffb200;
+    border-color: #ffb200;
+    font-size: 1rem;
+  }
+  
+  .signup-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .signup-right h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+  }
+  
+  .signup-right p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+  }
+  
+  .signup-right form {
+    width: 100%;
+    max-width: 360px;
+  }
+  
+  .signup-right button {
+    width: 100%;
+  }
+  
+  .custom-input .ant-input {
+    border-radius: 15px;
+    border: 1px solid #dddddd8f;
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 16px;
+    padding: 12px;
+  }
+  
+  .custom-input .ant-input-prefix {
+    color: #8c8c8c;
+  }
+  
+  .custom-form-item .ant-form-item-label > label {
+    color: #8c8c8c;
+    font-family: 'Poppins', sans-serif !important;
+  }
+  
+  .error-message {
+    color: red;
+    margin-bottom: 10px;
+  }
+  
