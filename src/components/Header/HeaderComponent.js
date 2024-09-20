@@ -1,5 +1,5 @@
+import { Button as AntButton, Layout } from 'antd';
 import React from 'react';
-import { Layout, Button as AntButton } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import '../../styles/global.css';
@@ -16,7 +16,7 @@ const HeaderComponent = () => {
       <div>
         <AntButton
           type="primary"
-          onClick={() => navigate('/home')} // Navega para a página inicial
+          onClick={() => navigate('/home')}
           style={{ marginRight: '10px' }}
         >
           Voltar
@@ -24,7 +24,7 @@ const HeaderComponent = () => {
         <AntButton
           onClick={() => {
             signout();
-            navigate("/"); // Navega para a página de login
+            navigate("/");
           }}
         >
           Sair

@@ -20,10 +20,10 @@ const Home = () => {
   };
 
   const handleAddSale = (saleData) => {
-    const requestId = Date.now(); // ID único para a solicitação
-    const requestData = { id: requestId, ...saleData, status: 'Pendente' }; // Adicione um status inicial
+    const requestId = Date.now();
+    const requestData = { id: requestId, ...saleData, status: 'Pendente' };
 
-    // Armazenar a solicitação no localStorage
+
     const storedRequests = JSON.parse(localStorage.getItem('requests')) || [];
     storedRequests.push(requestData);
     localStorage.setItem('requests', JSON.stringify(storedRequests));

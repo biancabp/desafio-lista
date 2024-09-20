@@ -2,10 +2,12 @@ import { Layout, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import HeaderComponent from '../../components/Header/HeaderComponent';
 
+
+
 const SalesTable = () => {
   const [salesData, setSalesData] = useState([]);
 
-  // Carregar as vendas do localStorage ao carregar o componente
+  //buscar e processar dados de vendas armazenados
   useEffect(() => {
     const storedSales = JSON.parse(localStorage.getItem('sales')) || [];
     const inProcessSales = storedSales.filter(
@@ -48,13 +50,13 @@ const SalesTable = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status) => status || 'Em Processamento', // Exibe "Em Processamento" se não houver status
+      render: (status) => status || 'Em Processamento',
     },
   ];
 
   return (
     <Layout>
-      <HeaderComponent /> {/* Cabeçalho */}
+      <HeaderComponent />
       <div style={{ padding: '50px', background: '#fff' }}>
         <h1>Vendas Realizadas</h1>
         <Table columns={columns} dataSource={salesData} rowKey="id" />

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { Button, Form, Input, Select } from 'antd';
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import './style.css';
@@ -88,7 +88,6 @@ const Signup = () => {
             />
           </Form.Item>
 
-          {/* Campo para escolher o role (gerente ou vendedor) */}
           <Form.Item
             name="role"
             className="custom-form-item"

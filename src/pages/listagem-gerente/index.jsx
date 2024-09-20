@@ -5,10 +5,10 @@ import HeaderComponent from '../../components/Header/HeaderComponent';
 const SalesTable = () => {
   const [salesData, setSalesData] = useState([]);
 
-  // Carregar as vendas do localStorage ao carregar o componente
+
   useEffect(() => {
     const storedSales = JSON.parse(localStorage.getItem('sales')) || [];
-    // Incluir vendas aprovadas, em processamento e reprovadas
+
     const inProcessSales = storedSales.filter(
       sale => sale.status === 'Aprovado' || sale.status === 'Em Processamento' || sale.status === 'Reprovado'
     );
@@ -50,13 +50,13 @@ const SalesTable = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status) => status || 'Em Processamento', // Exibe "Em Processamento" se não houver status
+      render: (status) => status || 'Em Processamento',
     },
   ];
 
   return (
     <Layout>
-      <HeaderComponent /> {/* Cabeçalho */}
+      <HeaderComponent />
       <div style={{ padding: '50px', background: '#fff' }}>
         <h1>Vendas Realizadas</h1>
         <Table columns={columns} dataSource={salesData} rowKey="id" />

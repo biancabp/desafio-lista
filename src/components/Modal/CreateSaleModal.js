@@ -14,6 +14,8 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
   const [productDescription, setProductDescription] = useState('');
   const [skuError, setSkuError] = useState('');
 
+
+  // encotrar sku na lista
   useEffect(() => {
     if (sku.trim() !== '') {
       const product = SKUs.find(p => p.SKU === sku);
@@ -30,6 +32,8 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
     }
   }, [sku]);
 
+  // calculo de frete
+
   const calculateShipping = (products, region) => {
     const regionFactor = {
       norte: 3,
@@ -41,6 +45,8 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
     const totalQuantity = products.reduce((sum, product) => sum + product.quantity, 0);
     return regionFactor[region] * totalQuantity;
   };
+
+
 
   const calculateTotalPrice = (products) => {
     if (!products.length || !region || !deliveryTime) return { total: 0, discount: 0 };
@@ -70,6 +76,8 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
     setDiscount(discount);
   };
 
+
+  // adicao d produtos na lista d produtos 
   const handleAddProduct = () => {
     const product = SKUs.find(p => p.SKU === sku);
 
@@ -82,9 +90,9 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
       const newProduct = { sku, quantity, ...product, preco: product.preco_cheio };
       const updatedProducts = [...products, newProduct];
       setProducts(updatedProducts);
-      updateTotals(); // Atualiza totais após adicionar produto
+      updateTotals();
 
-      setSku(''); // Limpar o SKU e quantidade
+      setSku('');
       setQuantity(1);
     }
   };
@@ -92,17 +100,17 @@ const CreateSaleModal = ({ visible, onCancel, onAddSale }) => {
   const handleRemoveProduct = (index) => {
     const updatedProducts = products.filter((_, i) => i !== index);
     setProducts(updatedProducts);
-    updateTotals(); // Atualiza totais após remover produto
+    updateTotals();
   };
 
   const handleRegionChange = (e) => {
     setRegion(e.target.value);
-    updateTotals(); // Atualiza totais ao mudar a região
+    updateTotals();
   };
 
   const handleDeliveryTimeChange = (e) => {
     setDeliveryTime(e.target.value);
-    updateTotals(); // Atualiza totais ao mudar o prazo
+    updateTotals();
   };
 
   const handleAddSale = () => {

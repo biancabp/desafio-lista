@@ -1,9 +1,9 @@
-import React from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import '../../styles/global.css'; 
+import '../../styles/global.css';
 
 const Signin = () => {
   const { signin } = useAuth();
@@ -23,12 +23,12 @@ const Signin = () => {
       return;
     }
 
-    // Obtenha o role do usuário após o login
+
     const role = localStorage.getItem("role");
 
-    // Redirecione o usuário com base no role
+
     if (role === 'gerente') {
-      navigate("/gerente-pedidos"); // Redireciona para a nova página de pedidos
+      navigate("/gerente-pedidos");
     } else if (role === 'vendedor') {
       navigate("/home");
     } else {
@@ -53,7 +53,7 @@ const Signin = () => {
           name="login"
           initialValues={{ remember: true }}
           style={{ maxWidth: 360 }}
-          onFinish={onFinish} // Adicionado o onFinish para lidar com o envio do formulário
+          onFinish={onFinish}
         >
           <Form.Item
             name="email"
@@ -64,7 +64,7 @@ const Signin = () => {
               prefix={<UserOutlined />}
               placeholder="E-mail"
               className="custom-input"
-              style={{ padding: '12px', borderRadius: '15px', borderColor: '#dddddd8f'}}
+              style={{ padding: '12px', borderRadius: '15px', borderColor: '#dddddd8f' }}
             />
           </Form.Item>
 
@@ -78,7 +78,7 @@ const Signin = () => {
               type="password"
               placeholder="Senha"
               className="custom-input"
-              style={{ padding: '12px', borderRadius: '15px', borderColor: '#dddddd8f'}}
+              style={{ padding: '12px', borderRadius: '15px', borderColor: '#dddddd8f' }}
             />
           </Form.Item>
 
