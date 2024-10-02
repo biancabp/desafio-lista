@@ -1,4 +1,4 @@
-# Desafio Seu Boné
+# Desafio 
 
 Este projeto é uma aplicação web desenvolvida utilizando [Create React App](https://github.com/facebook/create-react-app) para gerenciar solicitações de venda e exibir informações sobre vendas realizadas.
 
